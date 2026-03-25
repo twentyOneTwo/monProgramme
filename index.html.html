@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Programme Prise de Masse</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f5f4f0;
+  --surface:#ffffff;
+  --panel:#f0ede8;
+  --border:#e0dbd4;
+  --border2:#ccc7be;
+  --orange:#e8620a;
+  --orange-light:#f97316;
+  --orange-bg:#fff4ee;
+  --cyan:#0891b2;
+  --cyan-bg:#ecfeff;
+  --green:#16a34a;
+  --green-bg:#f0fdf4;
+  --red:#dc2626;
+  --red-bg:#fef2f2;
+  --yellow:#d97706;
+  --yellow-bg:#fffbeb;
+  --text:#1a1714;
+  --text2:#4a4540;
+  --text3:#8a837a;
+  --shadow:0 1px 3px rgba(0,0,0,0.08),0 1px 2px rgba(0,0,0,0.06);
+  --shadow-md:0 4px 12px rgba(0,0,0,0.08);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:15px;line-height:1.6}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,#1a1714 0%,#2d2520 50%,#1a1714 100%);color:#fff;padding:60px 20px 50px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 70% 50%,rgba(232,98,10,0.2) 0%,transparent 60%)}
+.hero-inner{max-width:1100px;margin:0 auto;position:relative}
+.hero-tag{display:inline-block;background:rgba(232,98,10,0.2);border:1px solid rgba(232,98,10,0.4);color:#fb923c;font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;padding:5px 14px;border-radius:20px;margin-bottom:24px}
+.hero h1{font-size:clamp(36px,7vw,80px);font-weight:900;line-height:1;letter-spacing:-1px;margin-bottom:16px}
+.hero h1 em{color:var(--orange-light);font-style:normal}
+.hero-desc{color:#a09890;font-size:16px;max-width:500px;margin-bottom:36px;line-height:1.7}
+.stats-row{display:flex;flex-wrap:wrap;gap:12px}
+.stat-pill{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:14px 20px;text-align:center;min-width:100px}
+.stat-pill .val{font-size:26px;font-weight:800;color:#fb923c;line-height:1}
+.stat-pill .lbl{font-size:11px;color:#706860;margin-top:3px;font-weight:500;letter-spacing:0.5px}
+
+/* NAV */
+.nav{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;box-shadow:var(--shadow)}
+.nav-inner{max-width:1100px;margin:0 auto;display:flex;overflow-x:auto;scrollbar-width:none;padding:0 12px}
+.nav-inner::-webkit-scrollbar{display:none}
+.nbtn{background:none;border:none;color:var(--text3);font-size:13px;font-weight:500;padding:14px 16px;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:all .2s;font-family:'Inter',sans-serif}
+.nbtn:hover{color:var(--text2)}
+.nbtn.on{color:var(--orange);border-bottom-color:var(--orange)}
+
+/* PAGES */
+.page{display:none;max-width:1100px;margin:0 auto;padding:40px 16px 100px}
+.page.on{display:block}
+
+/* TITLES */
+.ptitle{font-size:clamp(28px,5vw,52px);font-weight:900;letter-spacing:-0.5px;margin-bottom:8px}
+.ptitle em{color:var(--orange);font-style:normal}
+.psub{color:var(--text3);font-size:15px;margin-bottom:32px;padding-bottom:24px;border-bottom:1px solid var(--border);max-width:640px;line-height:1.7}
+
+/* SECTION TITLES */
+.stitle{font-size:18px;font-weight:700;margin:36px 0 16px;color:var(--text);display:flex;align-items:center;gap:8px}
+.stitle::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* CALLOUT */
+.callout{border-radius:12px;padding:14px 18px;margin:16px 0;font-size:14px;line-height:1.7;border:1px solid}
+.callout-orange{background:var(--orange-bg);border-color:#fcd9bc;color:#7c3510}
+.callout-orange strong{color:var(--orange)}
+.callout-cyan{background:var(--cyan-bg);border-color:#a5f3fc;color:#164e63}
+.callout-cyan strong{color:var(--cyan)}
+.callout-green{background:var(--green-bg);border-color:#bbf7d0;color:#14532d}
+.callout-green strong{color:var(--green)}
+.callout-red{background:var(--red-bg);border-color:#fecaca;color:#7f1d1d}
+.callout-red strong{color:var(--red)}
+.callout-yellow{background:var(--yellow-bg);border-color:#fde68a;color:#78350f}
+.callout-yellow strong{color:var(--yellow)}
+
+/* CARDS GRID */
+.g2{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.g3{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+.g4{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px;box-shadow:var(--shadow);transition:box-shadow .2s,transform .2s}
+.card:hover{box-shadow:var(--shadow-md);transform:translateY(-2px)}
+.card h3{font-size:15px;font-weight:700;color:var(--orange);margin-bottom:8px}
+.card p{color:var(--text2);font-size:14px;line-height:1.7}
+.card ul{list-style:none;margin-top:8px}
+.card ul li{font-size:13px;color:var(--text2);padding:5px 0 5px 16px;border-bottom:1px solid var(--border);position:relative}
+.card ul li:last-child{border:none}
+.card ul li::before{content:'›';position:absolute;left:0;color:var(--orange);font-weight:700}
+
+/* DAY TABS */
+.day-tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.dtab{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 16px;cursor:pointer;transition:all .2s;text-align:center;min-width:80px;box-shadow:var(--shadow)}
+.dtab:hover{border-color:var(--orange)}
+.dtab.on{background:var(--orange-bg);border-color:var(--orange)}
+.dtab .dname{font-size:10px;font-weight:600;letter-spacing:1px;color:var(--text3);text-transform:uppercase;margin-bottom:3px}
+.dtab.on .dname{color:var(--orange)}
+.dtab .dtype{font-size:13px;font-weight:600;color:var(--text)}
+.dtab.rest .dtype{color:var(--text3)}
+.dtab.on .dtype{color:var(--orange)}
+
+.day-panel{display:none;background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:var(--shadow)}
+.day-panel.on{display:block}
+.day-header{padding:20px 24px 16px;border-bottom:1px solid var(--border);background:var(--panel)}
+.day-header h3{font-size:22px;font-weight:800;color:var(--text)}
+.day-header p{color:var(--text3);font-size:13px;margin-top:4px}
+
+/* EXERCISE TABLE */
+.exo-table{width:100%;border-collapse:collapse}
+.exo-table th{font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--text3);text-align:left;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--panel)}
+.exo-table td{padding:14px 16px;border-bottom:1px solid var(--border);font-size:14px;vertical-align:middle}
+.exo-table tr:last-child td{border:none}
+.exo-table .ename{font-weight:600;color:var(--text)}
+.exo-table .esets{font-weight:700;color:var(--orange);font-size:13px;white-space:nowrap}
+.exo-table .erest{color:var(--cyan);font-size:13px;font-weight:600;white-space:nowrap}
+.exo-table .etip{color:var(--text3);font-size:13px;line-height:1.5}
+.exo-table tr:hover td{background:#fafaf9}
+.tbl-num{width:28px;height:28px;background:var(--orange-bg);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--orange)}
+
+/* EXERCISE CARDS (page exercices) */
+.exo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;margin:16px 0}
+.exo-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:var(--shadow);transition:all .2s}
+.exo-card:hover{box-shadow:var(--shadow-md);transform:translateY(-3px)}
+.anim-box{height:200px;background:var(--panel);position:relative;display:flex;align-items:center;justify-content:center;cursor:pointer;overflow:hidden}
+.anim-box canvas{display:block}
+.play-btn{position:absolute;bottom:10px;right:10px;background:var(--orange);color:#fff;border:none;border-radius:8px;padding:6px 12px;font-size:12px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:background .2s}
+.play-btn:hover{background:var(--orange-light)}
+.prio-badge{position:absolute;top:10px;left:10px;background:var(--orange);color:#fff;font-size:10px;font-weight:700;letter-spacing:1px;padding:3px 9px;border-radius:20px;text-transform:uppercase}
+.exo-body{padding:16px 18px}
+.exo-name{font-size:17px;font-weight:700;color:var(--text);margin-bottom:4px}
+.exo-sets{font-size:13px;font-weight:600;color:var(--orange);margin-bottom:8px}
+.exo-tip{color:var(--text3);font-size:13px;line-height:1.6}
+.muscles{display:flex;flex-wrap:wrap;gap:4px;margin-top:10px}
+.mtag{font-size:11px;font-weight:500;padding:3px 9px;border-radius:20px;background:var(--panel);color:var(--text3);border:1px solid var(--border)}
+
+/* NUTRITION */
+.macro-bar{display:flex;height:12px;border-radius:6px;overflow:hidden;margin:14px 0 8px;gap:2px}
+.mp{background:#0891b2;border-radius:3px}
+.mc{background:var(--orange);border-radius:3px}
+.mf{background:var(--yellow);border-radius:3px}
+.macro-key{display:flex;gap:16px;flex-wrap:wrap;font-size:13px;color:var(--text2)}
+.mk-dot{width:10px;height:10px;border-radius:3px;display:inline-block;margin-right:5px;vertical-align:middle}
+
+.shake-card{background:linear-gradient(135deg,#1a1714,#2d2520);border-radius:16px;padding:24px;color:#fff;margin:16px 0;position:relative;overflow:hidden}
+.shake-card::before{content:'';position:absolute;top:-40px;right:-40px;width:160px;height:160px;background:rgba(232,98,10,0.15);border-radius:50%}
+.shake-card h3{font-size:20px;font-weight:800;color:#fb923c;margin-bottom:4px}
+.shake-card .kcal{font-size:32px;font-weight:900;color:#fff;margin:8px 0 4px}
+.shake-card .sub{color:#a09890;font-size:13px}
+.shake-ingredients{display:flex;flex-direction:column;gap:8px;margin-top:16px}
+.ing-row{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,0.06);border-radius:10px;padding:10px 14px}
+.ing-icon{font-size:20px;width:32px;text-align:center}
+.ing-info{flex:1}
+.ing-name{font-size:14px;font-weight:600;color:#fff}
+.ing-detail{font-size:12px;color:#a09890}
+.ing-kcal{font-size:13px;font-weight:700;color:#fb923c}
+
+.meal{display:flex;gap:14px;padding:16px;background:var(--surface);border:1px solid var(--border);border-radius:12px;margin:8px 0;transition:box-shadow .2s;align-items:flex-start}
+.meal:hover{box-shadow:var(--shadow-md)}
+.meal-time{font-size:12px;font-weight:700;color:var(--orange);min-width:50px;padding-top:2px}
+.meal-info{flex:1}
+.meal-info h4{font-size:15px;font-weight:700;margin-bottom:4px;color:var(--text)}
+.meal-info p{color:var(--text3);font-size:13px;line-height:1.6}
+.meal-info .avail{color:var(--green);font-size:12px;margin-top:4px;font-weight:500}
+.meal-kcal{font-size:13px;font-weight:700;color:var(--text3);white-space:nowrap;padding-top:2px}
+.meal-highlight{border-color:var(--orange);background:var(--orange-bg)}
+
+/* FOOD CARDS */
+.food-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:var(--shadow);transition:all .2s}
+.food-card:hover{box-shadow:var(--shadow-md);transform:translateY(-2px)}
+.food-img{height:130px;overflow:hidden;background:var(--panel)}
+.food-img img{width:100%;height:100%;object-fit:cover}
+.food-body{padding:14px}
+.food-body h4{font-size:15px;font-weight:700;margin-bottom:5px;color:var(--text)}
+.food-body .macros{font-size:12px;color:var(--text3)}
+.food-body .macros span{color:var(--orange);font-weight:600}
+.food-body .role{color:var(--text3);font-size:12px;margin-top:6px;line-height:1.5}
+
+/* SUPPLEMENTS */
+.supp-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px;box-shadow:var(--shadow);border-top:3px solid var(--orange)}
+.supp-card.cyan{border-top-color:var(--cyan)}
+.supp-card h3{font-size:16px;font-weight:700;margin-bottom:6px;color:var(--text)}
+.supp-card .dose{font-size:14px;font-weight:700;color:var(--orange);margin-bottom:10px}
+.supp-card.cyan .dose{color:var(--cyan)}
+.supp-card p{color:var(--text3);font-size:13px;line-height:1.7}
+
+/* TIMING TABLE */
+.timing-table{width:100%;border-collapse:collapse;margin:16px 0}
+.timing-table th{font-size:12px;font-weight:600;color:var(--text3);text-align:left;padding:10px 14px;border-bottom:2px solid var(--border);letter-spacing:0.5px}
+.timing-table td{padding:12px 14px;border-bottom:1px solid var(--border);font-size:14px}
+.timing-table tr:last-child td{border:none}
+.timing-table .check{color:var(--green);font-weight:700;font-size:16px}
+.timing-table .cross{color:var(--red);font-weight:700;font-size:16px}
+.timing-table tr:hover td{background:var(--panel)}
+
+/* TIPS */
+.tip-item{display:flex;gap:16px;padding:20px 0;border-bottom:1px solid var(--border);align-items:flex-start}
+.tip-num{font-size:40px;font-weight:900;color:var(--orange);opacity:.2;line-height:1;min-width:40px}
+.tip-text h3{font-size:16px;font-weight:700;margin-bottom:5px;color:var(--text)}
+.tip-text p{color:var(--text3);font-size:14px;line-height:1.7}
+
+/* RESPONSIVE */
+@media(max-width:600px){
+  .hero{padding:40px 16px 36px}
+  .stats-row{gap:8px}
+  .stat-pill{min-width:80px;padding:10px 14px}
+  .stat-pill .val{font-size:22px}
+  .exo-table th:nth-child(1),.exo-table td:nth-child(1){display:none}
+  .exo-table th:nth-child(5),.exo-table td:nth-child(5){display:none}
+  .meal{flex-wrap:wrap}
+  .meal-kcal{margin-left:0}
+  .day-tabs{gap:6px}
+  .dtab{min-width:60px;padding:8px 10px}
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-tag">Programme personnalisé · Ectomorphe</div>
+    <h1>TON PLAN<br><em>PRISE DE MASSE</em></h1>
+    <p class="hero-desc">1m77 · 55 kg. Chaque calorie, chaque série, chaque shake est calculé pour ta réalité.</p>
+    <div class="stats-row">
+      <div class="stat-pill"><div class="val">55<span style="font-size:16px">kg</span></div><div class="lbl">Poids actuel</div></div>
+      <div class="stat-pill"><div class="val">1.77<span style="font-size:16px">m</span></div><div class="lbl">Taille</div></div>
+      <div class="stat-pill"><div class="val">3200<span style="font-size:16px">kcal</span></div><div class="lbl">Objectif/jour</div></div>
+      <div class="stat-pill"><div class="val">+8<span style="font-size:16px">kg</span></div><div class="lbl">Objectif 12 sem</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-inner">
+    <button class="nbtn on" onclick="goTo('profil',this)">Profil</button>
+    <button class="nbtn" onclick="goTo('planning',this)">Planning</button>
+    <button class="nbtn" onclick="goTo('exercices',this)">Exercices</button>
+    <button class="nbtn" onclick="goTo('nutrition',this)">Nutrition</button>
+    <button class="nbtn" onclick="goTo('aliments',this)">Aliments</button>
+    <button class="nbtn" onclick="goTo('supplements',this)">Suppléments</button>
+    <button class="nbtn" onclick="goTo('erreurs',this)">Erreurs</button>
+  </div>
+</nav>
+
+<!-- PAGE 1 : PROFIL -->
+<div class="page on" id="profil">
+  <div class="ptitle">Profil <em>Ectomorphe</em></div>
+  <p class="psub">À 55 kg pour 1m77, tu as un potentiel de transformation énorme. Chaque kilo gagné sera visible immédiatement sur ta silhouette.</p>
+
+  <div class="callout callout-orange">
+    <strong>📊 Ton IMC : 17.8</strong> — En dessous de la normale (18.5). Ton métabolisme brûle tout. Il faut lui apporter plus d'énergie qu'il n'en dépense, chaque jour, sans exception.
+  </div>
+  <div class="callout callout-cyan">
+    <strong>🔥 Métabolisme de base (BMR) :</strong> ~1640 kcal/jour &nbsp;·&nbsp; <strong>Dépense totale (TDEE) :</strong> ~2600–2800 kcal/jour<br>
+    <strong>Objectif avec surplus :</strong> 3100–3300 kcal/jour → atteint grâce au Gainer + tes aliments
+  </div>
+
+  <div class="stitle">Les 3 lois de ta transformation</div>
+  <div class="g3">
+    <div class="card"><h3>🍽️ Loi #1 — Manger</h3><p>3200 kcal/jour non-négociables. Le shake matin + shake post-WO + tes repas couvrent cet objectif. Si pas de prise après 10 jours → augmente la dose de gainer.</p></div>
+    <div class="card"><h3>💪 Loi #2 — Soulever lourd</h3><p>Squat, soulevé de terre, développé couché, tractions, rowing. Ces 5 exercices font 80% de ta masse. Augmente les charges régulièrement.</p></div>
+    <div class="card"><h3>😴 Loi #3 — Dormir</h3><p>8-9h de sommeil. L'hormone de croissance est libérée pendant le sommeil profond. Mal dormir annule tes séances. La croissance arrive au repos.</p></div>
+  </div>
+
+  <div class="stitle">Progression sur 12 semaines</div>
+  <div class="g3">
+    <div class="card"><h3>Sem. 1–4 · Adaptation</h3><p>Apprendre les mouvements. Installer les habitudes. Prise attendue : +0.5 à 1 kg. Les shakes deviennent une routine.</p></div>
+    <div class="card"><h3>Sem. 5–8 · Construction</h3><p>Charges en hausse. Volume plus élevé. Prise attendue : +1 à 1.5 kg. Les épaules s'élargissent, les vêtements changent.</p></div>
+    <div class="card"><h3>Sem. 9–12 · Intensification</h3><p>Charges maximales. Résultat total attendu : +5 à 8 kg. Bilan photo à 12 semaines.</p></div>
+  </div>
+</div>
+
+<!-- PAGE 2 : PLANNING -->
+<div class="page" id="planning">
+  <div class="ptitle">Plan<em>ning</em></div>
+  <p class="psub">Push/Pull/Legs sur 5 jours. Chaque groupe musculaire travaillé 2× par semaine. Séances de 55–65 min max.</p>
+
+  <div class="day-tabs">
+    <div class="dtab train on" onclick="showDay('lun',this)"><div class="dname">Lun</div><div class="dtype">Push A</div></div>
+    <div class="dtab train" onclick="showDay('mar',this)"><div class="dname">Mar</div><div class="dtype">Pull A</div></div>
+    <div class="dtab train" onclick="showDay('mer',this)"><div class="dname">Mer</div><div class="dtype">Legs A</div></div>
+    <div class="dtab rest" onclick="showDay('jeu',this)"><div class="dname">Jeu</div><div class="dtype">Repos</div></div>
+    <div class="dtab train" onclick="showDay('ven',this)"><div class="dname">Ven</div><div class="dtype">Push B</div></div>
+    <div class="dtab train" onclick="showDay('sam',this)"><div class="dname">Sam</div><div class="dtype">Pull+Legs</div></div>
+    <div class="dtab rest" onclick="showDay('dim',this)"><div class="dname">Dim</div><div class="dtype">Repos</div></div>
+  </div>
+
+  <div class="day-panel on" id="day-lun">
+    <div class="day-header"><h3>Lundi — Push A</h3><p>Poitrine · Épaules · Triceps &nbsp;|&nbsp; ~60 min</p></div>
+    <div style="overflow-x:auto">
+    <table class="exo-table"><thead><tr><th>#</th><th>Exercice</th><th>Séries × Reps</th><th>Repos</th><th>Conseils</th></tr></thead><tbody>
+      <tr><td><div class="tbl-num">1</div></td><td class="ename">Développé couché barre</td><td class="esets">4 × 6-8</td><td class="erest">2'30</td><td class="etip">Barre effleure la poitrine. Poussée explosive. Exercice principal. Charge départ : 30 kg.</td></tr>
+      <tr><td><div class="tbl-num">2</div></td><td class="ename">Développé incliné haltères</td><td class="esets">3 × 8-10</td><td class="erest">2'</td><td class="etip">Banc à 30-45°. Descente lente (3 sec), poussée explosive.</td></tr>
+      <tr><td><div class="tbl-num">3</div></td><td class="ename">Presse militaire haltères</td><td class="esets">4 × 8-10</td><td class="erest">2'</td><td class="etip">Assis, coudes à 90° en bas, bras tendus en haut. Dos droit.</td></tr>
+      <tr><td><div class="tbl-num">4</div></td><td class="ename">Élévations latérales</td><td class="esets">3 × 12-15</td><td class="erest">1'30</td><td class="etip">Poids léger ! Monter jusqu'à l'horizontal, descente lente.</td></tr>
+      <tr><td><div class="tbl-num">5</div></td><td class="ename">Dips barres parallèles</td><td class="esets">3 × 8-10</td><td class="erest">2'</td><td class="etip">Légèrement penché en avant. Descente jusqu'à 90°.</td></tr>
+      <tr><td><div class="tbl-num">6</div></td><td class="ename">Pushdown triceps poulie</td><td class="esets">3 × 12</td><td class="erest">1'</td><td class="etip">Coudes collés au corps. Extension complète, contraction 1 sec.</td></tr>
+    </tbody></table></div>
+  </div>
+
+  <div class="day-panel" id="day-mar">
+    <div class="day-header"><h3>Mardi — Pull A</h3><p>Dos · Biceps · Trapèzes &nbsp;|&nbsp; ~65 min</p></div>
+    <div style="overflow-x:auto">
+    <table class="exo-table"><thead><tr><th>#</th><th>Exercice</th><th>Séries × Reps</th><th>Repos</th><th>Conseils</th></tr></thead><tbody>
+      <tr><td><div class="tbl-num">1</div></td><td class="ename">Soulevé de terre</td><td class="esets">4 × 4-6</td><td class="erest">3'</td><td class="etip">Dos plat obligatoire. Hanches en arrière, barre près du corps. Commence léger, maîtrise la technique. Charge départ : 40-50 kg.</td></tr>
+      <tr><td><div class="tbl-num">2</div></td><td class="ename">Tractions pronation</td><td class="esets">4 × 6-8</td><td class="erest">2'30</td><td class="etip">Prise large, pleine amplitude. Si difficile : assistance élastique.</td></tr>
+      <tr><td><div class="tbl-num">3</div></td><td class="ename">Rowing barre penché</td><td class="esets">3 × 8-10</td><td class="erest">2'</td><td class="etip">Buste à 45°, barre vers le nombril. Coudes vers l'arrière.</td></tr>
+      <tr><td><div class="tbl-num">4</div></td><td class="ename">Tirage poulie haute</td><td class="esets">3 × 10-12</td><td class="erest">1'30</td><td class="etip">Barre vers le haut de la poitrine. Coudes vers le bas.</td></tr>
+      <tr><td><div class="tbl-num">5</div></td><td class="ename">Curl barre EZ</td><td class="esets">3 × 8-10</td><td class="erest">1'30</td><td class="etip">Coudes fixes. Montée complète, descente lente (2-3 sec).</td></tr>
+      <tr><td><div class="tbl-num">6</div></td><td class="ename">Curl marteau haltères</td><td class="esets">3 × 10</td><td class="erest">1'</td><td class="etip">Poignets neutres. Travaille le brachial et long supinateur.</td></tr>
+    </tbody></table></div>
+  </div>
+
+  <div class="day-panel" id="day-mer">
+    <div class="day-header"><h3>Mercredi — Legs A</h3><p>Quadriceps · Ischios · Fessiers · Mollets &nbsp;|&nbsp; ~70 min · La séance la plus importante</p></div>
+    <div style="overflow-x:auto">
+    <table class="exo-table"><thead><tr><th>#</th><th>Exercice</th><th>Séries × Reps</th><th>Repos</th><th>Conseils</th></tr></thead><tbody>
+      <tr><td><div class="tbl-num">1</div></td><td class="ename">Squat barre</td><td class="esets">5 × 5</td><td class="erest">3'</td><td class="etip">Barre sur les trapèzes, pieds à largeur d'épaules. Descendre sous le parallèle. Charge départ : 40 kg.</td></tr>
+      <tr><td><div class="tbl-num">2</div></td><td class="ename">Presse à cuisses</td><td class="esets">3 × 10-12</td><td class="erest">2'</td><td class="etip">Pieds hauts et larges. Descendre jusqu'à 90°.</td></tr>
+      <tr><td><div class="tbl-num">3</div></td><td class="ename">Leg curl couché</td><td class="esets">3 × 10-12</td><td class="erest">1'30</td><td class="etip">Isolation ischios. Contraction complète, descente lente.</td></tr>
+      <tr><td><div class="tbl-num">4</div></td><td class="ename">Hip thrust barre</td><td class="esets">3 × 12</td><td class="erest">1'30</td><td class="etip">Haut du dos sur banc, barre sur les hanches. Pousser jusqu'à alignement.</td></tr>
+      <tr><td><div class="tbl-num">5</div></td><td class="ename">Fentes marchées haltères</td><td class="esets">3 × 12/jambe</td><td class="erest">2'</td><td class="etip">Grand pas en avant, genou arrière à 2-3 cm du sol.</td></tr>
+      <tr><td><div class="tbl-num">6</div></td><td class="ename">Élévations mollets</td><td class="esets">4 × 15-20</td><td class="erest">1'</td><td class="etip">Pleine amplitude obligatoire. Lentement. Volume élevé.</td></tr>
+    </tbody></table></div>
+  </div>
+
+  <div class="day-panel" id="day-jeu">
+    <div class="day-header"><h3>Jeudi — Repos Actif</h3><p>Récupération · Mobilité · Alimentation</p></div>
+    <div style="padding:20px 24px">
+      <div class="callout callout-green"><strong>✅ Activités OK :</strong> Marche 20-30 min · Étirements 15 min · Préparer les repas de la semaine</div>
+      <div class="callout callout-red"><strong>🚫 À éviter :</strong> Cardio intense · Sauter des repas · Manquer de sommeil</div>
+      <p style="color:var(--text3);font-size:14px;margin-top:12px">Tes muscles se reconstruisent aujourd'hui. Mange bien, dors 8h, bois ton shake du matin + créatine.</p>
+    </div>
+  </div>
+
+  <div class="day-panel" id="day-ven">
+    <div class="day-header"><h3>Vendredi — Push B</h3><p>Poitrine · Épaules · Triceps (variation)</p></div>
+    <div style="overflow-x:auto">
+    <table class="exo-table"><thead><tr><th>#</th><th>Exercice</th><th>Séries × Reps</th><th>Repos</th><th>Conseils</th></tr></thead><tbody>
+      <tr><td><div class="tbl-num">1</div></td><td class="ename">Développé militaire barre debout</td><td class="esets">4 × 6-8</td><td class="erest">2'30</td><td class="etip">Debout, gainage constant. Pousser verticalement au-dessus de la tête.</td></tr>
+      <tr><td><div class="tbl-num">2</div></td><td class="ename">Développé couché haltères</td><td class="esets">3 × 8-10</td><td class="erest">2'</td><td class="etip">Plus d'amplitude que la barre. Chaque bras travaille indépendamment.</td></tr>
+      <tr><td><div class="tbl-num">3</div></td><td class="ename">Écarté poulie basse</td><td class="esets">3 × 12-15</td><td class="erest">1'30</td><td class="etip">Croisement au niveau de la poitrine. Contraction maximale.</td></tr>
+      <tr><td><div class="tbl-num">4</div></td><td class="ename">Face pull poulie haute</td><td class="esets">3 × 15</td><td class="erest">1'</td><td class="etip">Tirer vers le front, écarter les mains. Protège les épaules. Ne jamais sauter.</td></tr>
+      <tr><td><div class="tbl-num">5</div></td><td class="ename">Skull crushers barre EZ</td><td class="esets">3 × 10</td><td class="erest">1'30</td><td class="etip">Barre descend vers le front. Coudes pointent vers le plafond.</td></tr>
+    </tbody></table></div>
+  </div>
+
+  <div class="day-panel" id="day-sam">
+    <div class="day-header"><h3>Samedi — Pull + Legs B</h3><p>Dos · Biceps · Jambes (variations)</p></div>
+    <div style="overflow-x:auto">
+    <table class="exo-table"><thead><tr><th>#</th><th>Exercice</th><th>Séries × Reps</th><th>Repos</th><th>Conseils</th></tr></thead><tbody>
+      <tr><td><div class="tbl-num">1</div></td><td class="ename">Soulevé de terre roumain</td><td class="esets">4 × 8-10</td><td class="erest">2'</td><td class="etip">Barre descend le long des jambes, hanches reculent. Étirement ischios.</td></tr>
+      <tr><td><div class="tbl-num">2</div></td><td class="ename">Rowing haltère 1 bras</td><td class="esets">3 × 10/côté</td><td class="erest">1'30</td><td class="etip">Genou et main sur banc. Tirer le coude le plus haut possible.</td></tr>
+      <tr><td><div class="tbl-num">3</div></td><td class="ename">Goblet squat haltère</td><td class="esets">4 × 10-12</td><td class="erest">2'</td><td class="etip">Haltère à deux mains contre la poitrine, descente profonde.</td></tr>
+      <tr><td><div class="tbl-num">4</div></td><td class="ename">Leg extension machine</td><td class="esets">3 × 12-15</td><td class="erest">1'30</td><td class="etip">Extension complète, contraction 1 sec en haut, descente lente.</td></tr>
+      <tr><td><div class="tbl-num">5</div></td><td class="ename">Curl incliné haltères</td><td class="esets">3 × 10</td><td class="erest">1'30</td><td class="etip">Banc incliné à 60°. Étirement maximal du biceps. Montée lente.</td></tr>
+    </tbody></table></div>
+  </div>
+
+  <div class="day-panel" id="day-dim">
+    <div class="day-header"><h3>Dimanche — Repos Complet</h3><p>Récupération totale · Recharge mentale</p></div>
+    <div style="padding:20px 24px"><p style="color:var(--text3);font-size:14px;line-height:1.8">Journée sans exercice. Mange bien, hydrate-toi, dors autant que possible. Les fibres musculaires terminent leur reconstruction aujourd'hui. Bois quand même ton shake du matin + créatine.</p></div>
+  </div>
+</div>
+
+<!-- PAGE 3 : EXERCICES -->
+<div class="page" id="exercices">
+  <div class="ptitle">Guide <em>Exercices</em></div>
+  <p class="psub">Chaque exercice animé en 3D. Appuie sur Play pour voir le mouvement. Maîtrise le geste avant d'augmenter la charge.</p>
+
+  <div class="stitle">Les fondamentaux — Priorité absolue</div>
+  <div class="exo-grid" id="exo-grid"></div>
+</div>
+
+<!-- PAGE 4 : NUTRITION -->
+<div class="page" id="nutrition">
+  <div class="ptitle">Nutri<em>tion</em></div>
+  <p class="psub">Plan basé sur ta réalité : peu de temps, budget limité, aliments simples. Le shake est ton arme principale.</p>
+
+  <div class="callout callout-orange">
+    <strong>📊 Tes macros cibles :</strong> 3200 kcal · 160g protéines · 440g glucides · 90g lipides<br>
+    <strong>Prise visée :</strong> 0.5–0.8 kg/semaine. Si stagnation après 10 jours → augmente dose gainer.
+  </div>
+
+  <div class="macro-bar">
+    <div class="mp" style="flex:20"></div>
+    <div class="mc" style="flex:55"></div>
+    <div class="mf" style="flex:25"></div>
+  </div>
+  <div class="macro-key" style="margin-bottom:28px">
+    <span><span class="mk-dot" style="background:#0891b2"></span>Protéines 20% — 160g</span>
+    <span><span class="mk-dot" style="background:var(--orange)"></span>Glucides 55% — 440g</span>
+    <span><span class="mk-dot" style="background:var(--yellow)"></span>Lipides 25% — 90g</span>
+  </div>
+
+  <div class="stitle">Ton shake hypercalorique — La base de tout</div>
+
+  <div class="shake-card">
+    <h3>Shake Prise de Masse</h3>
+    <div class="kcal">1500–1700 kcal</div>
+    <div class="sub">avec Gainer + Créatine · Préparation : 5 min au mixeur</div>
+    <div class="shake-ingredients">
+      <div class="ing-row"><div class="ing-icon">💧</div><div class="ing-info"><div class="ing-name">400 ml eau + 4 sachets Bonnet Rouge</div><div class="ing-detail">Reconstituer le lait en premier</div></div><div class="ing-kcal">~200 kcal</div></div>
+      <div class="ing-row"><div class="ing-icon">🍌</div><div class="ing-info"><div class="ing-name">2 bananes mûres</div><div class="ing-detail">Glucides rapides + potassium</div></div><div class="ing-kcal">~200 kcal</div></div>
+      <div class="ing-row"><div class="ing-icon">🌾</div><div class="ing-info"><div class="ing-name">80g flocons d'avoine</div><div class="ing-detail">Énergie longue durée (sauf post-WO)</div></div><div class="ing-kcal">~310 kcal</div></div>
+      <div class="ing-row"><div class="ing-icon">🥜</div><div class="ing-info"><div class="ing-name">3 c.à.s pâte d'arachide</div><div class="ing-detail">Lipides sains + calories denses</div></div><div class="ing-kcal">~285 kcal</div></div>
+      <div class="ing-row"><div class="ing-icon">🥚</div><div class="ing-info"><div class="ing-name">2 œufs entiers</div><div class="ing-detail">Protéines complètes</div></div><div class="ing-kcal">~140 kcal</div></div>
+      <div class="ing-row"><div class="ing-icon">💪</div><div class="ing-info"><div class="ing-name">1 dose Gainer (selon marque)</div><div class="ing-detail">Calories + protéines supplémentaires</div></div><div class="ing-kcal">+400-600 kcal</div></div>
+      <div class="ing-row"><div class="ing-icon">⚡</div><div class="ing-info"><div class="ing-name">5g créatine monohydrate</div><div class="ing-detail">Insipide, se mélange parfaitement</div></div><div class="ing-kcal">0 kcal</div></div>
+    </div>
+  </div>
+
+  <div class="callout callout-yellow">
+    <strong>⚠️ Shake post-entraînement :</strong> Retire les flocons d'avoine (trop lourd après l'effort). Garde tout le reste. Boire dans les 45 min après la séance — jamais sauter.
+  </div>
+
+  <div class="stitle">Ton plan alimentaire journalier</div>
+
+  <div class="callout callout-yellow">
+    <strong>⏰ Entraînement 17h–19h · Pas de déjeuner le midi</strong> — Les calories manquantes sont compensées par une dose de gainer augmentée le matin, une collation plus grande et un dîner renforcé.
+  </div>
+
+  <div class="meal">
+    <div class="meal-time">6h30</div>
+    <div class="meal-info">
+      <h4>🌅 Shake du matin — Priorité #1</h4>
+      <p>Shake complet : Bonnet Rouge + bananes + flocons + pâte d'arachide + œufs + Gainer (dose augmentée) + Créatine</p>
+      <p class="avail">✅ 5 min au mixeur · Créatine ici tous les jours y compris jours de repos</p>
+    </div>
+    <div class="meal-kcal">~1700 kcal</div>
+  </div>
+
+  <div class="meal">
+    <div class="meal-time">10h00</div>
+    <div class="meal-info">
+      <h4>🍌 Collation matin — Plus grosse que d'habitude</h4>
+      <p>3 bananes + 3 c.à.s pâte d'arachide — emporter dans un sac, aucune préparation</p>
+      <p class="avail">✅ Zéro cuisine · Compense l'absence du déjeuner</p>
+    </div>
+    <div class="meal-kcal">~500 kcal</div>
+  </div>
+
+  <div class="meal">
+    <div class="meal-time">15h30</div>
+    <div class="meal-info">
+      <h4>⚡ Pré-entraînement — 1h30 avant la séance</h4>
+      <p>1 banane + 1 c.à.s pâte d'arachide + 2 œufs durs — préparés le dimanche</p>
+      <p class="avail">✅ Énergie pour la séance · Pas trop lourd · Aucune préparation</p>
+    </div>
+    <div class="meal-kcal">~320 kcal</div>
+  </div>
+
+  <div class="meal" style="background:var(--panel);border-color:var(--border2)">
+    <div class="meal-time" style="color:var(--text3)">17h–19h</div>
+    <div class="meal-info">
+      <h4>💪 Séance d'entraînement</h4>
+      <p>Boire de l'eau pendant la séance. Aucun aliment solide.</p>
+      <p class="avail" style="color:var(--text3)">→ Shake post-WO dès la fin de la séance</p>
+    </div>
+    <div class="meal-kcal" style="color:var(--text3)">0 kcal</div>
+  </div>
+
+  <div class="meal meal-highlight">
+    <div class="meal-time" style="color:var(--green)">19h–19h30</div>
+    <div class="meal-info">
+      <h4>🔥 Shake post-entraînement — Ne jamais sauter !</h4>
+      <p>Shake SANS flocons : Bonnet Rouge + 2 bananes + pâte d'arachide + 2 œufs + Gainer</p>
+      <p class="avail">✅ Dans les 30-45 min après la séance · Pas de créatine ici (déjà prise le matin)</p>
+    </div>
+    <div class="meal-kcal">~900 kcal</div>
+  </div>
+
+  <div class="meal">
+    <div class="meal-time">20h30</div>
+    <div class="meal-info">
+      <h4>🍖 Dîner renforcé</h4>
+      <p>Haricots + 6 œufs + 1 avocat entier + banane en dessert</p>
+      <p class="avail">✅ Plus copieux pour compenser l'absence du déjeuner</p>
+    </div>
+    <div class="meal-kcal">~600 kcal</div>
+  </div>
+
+  <div class="meal">
+    <div class="meal-time">22h30</div>
+    <div class="meal-info">
+      <h4>🌙 Collation nuit</h4>
+      <p>2 œufs durs + 1 c.à.s pâte d'arachide + verre de lait Bonnet Rouge</p>
+      <p class="avail">✅ Protéines lentes pendant le sommeil = moins de catabolisme</p>
+    </div>
+    <div class="meal-kcal">~300 kcal</div>
+  </div>
+
+  <div class="callout callout-green" style="margin-top:20px">
+    <strong>✅ Total journalier estimé (jour d'entraînement) : ~4320 kcal · ~170g protéines</strong><br>
+    Jour de repos : shake matin + collation + dîner sans shake post-WO → ~3100 kcal. Parfait.
+  </div>
+</div>
+
+<!-- PAGE 5 : ALIMENTS -->
+<div class="page" id="aliments">
+  <div class="ptitle">Tes <em>Aliments</em></div>
+  <p class="psub">Comment optimiser chaque aliment disponible pour la prise de masse.</p>
+
+  <div class="g4">
+    <div class="food-card"><div class="food-img"><img src="https://www.auchan.sn/img/p/6/2/5/4/3/0/625430.jpg" alt="avoine"></div><div class="food-body"><h4>🌾 Flocons d'avoine</h4><div class="macros">100g : <span>389 kcal · 17g prot · 66g gluc</span></div><div class="role">Glucide complexe #1 de l'ectomorphe. Utilisé dans le shake matin. 150-200g/jour.</div></div></div>
+    <div class="food-card"><div class="food-img"><img src="https://tse1.explicit.bing.net/th/id/OIP.LqCQNcOyrca-sk6QXwFdeAHaEK?w=1200&h=675&rs=1&pid=ImgDetMain&o=7&rm=3" alt="oeufs"></div><div class="food-body"><h4>🥚 Œufs entiers</h4><div class="macros">1 œuf : <span>70 kcal · 6g prot · 5g lip</span></div><div class="role">Protéine la plus complète. Manger le jaune ! 6-8 œufs/jour. Faire bouillir en avance.</div></div></div>
+    <div class="food-card"><div class="food-img"><img src="https://images.unsplash.com/photo-1603833665858-e61d17a86224?w=400&q=70" alt="banane"></div><div class="food-body"><h4>🍌 Banane</h4><div class="macros">1 banane : <span>100 kcal · 1g prot · 23g gluc</span></div><div class="role">Glucides rapides + potassium. 3-4 par jour. Parfaite dans le shake et en collation.</div></div></div>
+    <div class="food-card"><div class="food-img"><img src="https://th.bing.com/th/id/R.14a921d4df5617c8f734d2f7a93cc9dc?rik=0QimVJzm21iYKw&riu=http%3a%2f%2fhealthybenefits.info%2fwp-content%2fuploads%2f2014%2f05%2fHaricot-beans.jpg&ehk=sw6RtR8QrzHtc%2fE6nlJgEESQKu5V4CcZ%2f7TD8HdMrnQ%3d&risl=&pid=ImgRaw&r=0" alt="haricots"></div><div class="food-body"><h4>🫘 Haricots</h4><div class="macros">100g cuits : <span>127 kcal · 9g prot · 22g gluc</span></div><div class="role">Protéines végétales + fibres. Complètent les œufs. 150g par repas.</div></div></div>
+    <div class="food-card"><div class="food-img"><img src="https://images.unsplash.com/photo-1523049673857-eb18f1d7b578?w=400&q=70"></div><div class="food-body"><h4>🥑 Avocat</h4><div class="macros">1/2 avocat : <span>120 kcal · 1.5g prot · 11g lip</span></div><div class="role">Lipides sains essentiels à la testostérone. 1 avocat entier/jour.</div></div></div>
+    <div class="food-card"><div class="food-img"><img src="https://images.unsplash.com/photo-1550583724-b2692b85b150?w=400&q=70" alt="lait"></div><div class="food-body"><h4>🥛 Lait Bonnet Rouge</h4><div class="macros">250ml : <span>~150 kcal · 8g prot · 12g gluc</span></div><div class="role">4 sachets de 20g pour 400ml d'eau. Base du shake. 500ml-1L/jour.</div></div></div>
+    <div class="food-card"><div class="food-img"><img src="https://img.freepik.com/photos-premium/pate-arachide-dans-pot-ouvert-cuillere-pres-cacahuetes-cremeuses-au-beurre-arachide-eparpillees-fond-clair-pour-vue-dessus-du-texte_114941-5597.jpg?w=1060" alt="pâte arachide"></div><div class="food-body"><h4>🥜 Pâte d'arachide</h4><div class="macros">2 c.à.s : <span>190 kcal · 8g prot · 16g lip</span></div><div class="role">Densité calorique maximale. Ajouter à tout : shake, banane, flocons. Clé de l'ecto.</div></div></div>
+    <div class="food-card"><div class="food-img"><img src="https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400&q=70" alt="riz"></div><div class="food-body"><h4>🍚 Riz (quand dispo)</h4><div class="macros">100g cuit : <span>130 kcal · 2.7g prot · 28g gluc</span></div><div class="role">Idéal quand disponible. 300-400g cuit/jour. Substitut : haricots + flocons.</div></div></div>
+  </div>
+</div>
+
+<!-- PAGE 6 : SUPPLÉMENTS -->
+<div class="page" id="supplements">
+  <div class="ptitle">Supplé<em>ments</em></div>
+  <p class="psub">Tu prends le Gainer + la Créatine. Voici comment les utiliser au maximum.</p>
+
+  <div class="g2">
+    <div class="supp-card">
+      <h3>💪 Gainer (Mass Gainer) — Priorité #1</h3>
+      <div class="dose">1 dose dans chaque shake · 2×/jour les jours d'entraînement</div>
+      <p>Conçu exactement pour les ectomorphes qui n'arrivent pas à manger assez. 1 dose = 400-600 kcal + 30g protéines. Avec tes aliments + 2 doses de gainer par jour d'entraînement, tu atteins 3500-4000 kcal facilement. C'est ton outil #1.</p>
+    </div>
+    <div class="supp-card cyan">
+      <h3>⚡ Créatine Monohydrate — Priorité #1</h3>
+      <div class="dose">5g chaque matin dans le shake · 7 jours/7 sans exception</div>
+      <p>Le supplément le plus étudié au monde. Elle sature progressivement tes muscles — arrêter les jours de repos annule cet effet. Boost de force +5-10%, prise de 1-2 kg rapide, meilleure récupération entre les séries. Résultat visible en 2-3 semaines.</p>
+    </div>
+  </div>
+
+  <div class="stitle">Quand prendre quoi — Tableau récapitulatif</div>
+  <div style="overflow-x:auto">
+  <table class="timing-table">
+    <thead><tr><th>Moment</th><th>Gainer</th><th>Créatine</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Matin (réveil)</strong></td><td class="check">✓ dans shake</td><td class="check">✓ 5g dans shake</td><td style="color:var(--text3);font-size:13px">Tous les jours, y compris repos</td></tr>
+      <tr><td><strong>Post-entraînement</strong></td><td class="check">✓ dans shake</td><td class="cross">✗ déjà pris</td><td style="color:var(--text3);font-size:13px">Dans les 45 min après séance</td></tr>
+      <tr><td><strong>Jours de repos</strong></td><td class="cross">✗ 1 seul shake</td><td class="check">✓ 5g matin</td><td style="color:var(--text3);font-size:13px">Créatine tous les jours sans exception</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="callout callout-cyan" style="margin-top:16px">
+    <strong>💡 Rappel :</strong> La créatine ne donne 0 calorie mais elle booste ta force à la salle ce qui te permet de soulever plus lourd et donc de construire plus de muscle. Le gainer lui apporte les calories qui manquent. Les deux ensemble c'est la combinaison idéale pour toi.
+  </div>
+</div>
+
+<!-- PAGE 7 : ERREURS -->
+<div class="page" id="erreurs">
+  <div class="ptitle">Évite ces <em>Erreurs</em></div>
+  <p class="psub">Les erreurs que font 95% des ectomorphes. Les connaître c'est ne pas les faire.</p>
+
+  <div class="tip-item"><div class="tip-num">01</div><div class="tip-text"><h3>Sauter le shake du matin</h3><p>C'est ton repas le plus important. 1500 kcal en 5 min. Si tu le sautes, tu pars avec 1500 kcal de déficit dès le matin. Prépare les ingrédients la veille pour aller vite.</p></div></div>
+  <div class="tip-item"><div class="tip-num">02</div><div class="tip-num">02</div><div class="tip-text"><h3>Oublier la créatine les jours de repos</h3><p>Elle doit saturer tes muscles en continu. Arrêter les weekends diminue l'effet. 5g dans un verre d'eau ou dans le shake matin, 7j/7, point final.</p></div></div>
+  <div class="tip-item"><div class="tip-num">03</div><div class="tip-text"><h3>Faire du cardio intensif</h3><p>À 55 kg tu ne peux pas te permettre de brûler des calories supplémentaires. Aucun HIIT, aucune course. Maximum : marche 25 min les jours de repos.</p></div></div>
+  <div class="tip-item"><div class="tip-num">04</div><div class="tip-text"><h3>Ignorer les exercices de base</h3><p>Squat, soulevé de terre, développé, tractions, rowing = 80% de ta masse. Les remplacer par des machines ou de l'isolation est l'erreur la plus commune des débutants.</p></div></div>
+  <div class="tip-item"><div class="tip-num">05</div><div class="tip-text"><h3>Changer de programme</h3><p>8 à 12 semaines minimum pour évaluer un programme. Changer chaque mois empêche toute progression. La constance dans la routine bat la variété dans l'excitation.</p></div></div>
+  <div class="tip-item"><div class="tip-num">06</div><div class="tip-text"><h3>Mal dormir</h3><p>L'hormone de croissance est sécrétée pendant le sommeil profond. Moins de 7h = résultats divisés par 2. Couche-toi à heure fixe, chambre fraîche et sombre.</p></div></div>
+  <div class="tip-item"><div class="tip-num">07</div><div class="tip-text"><h3>Sauter le shake post-entraînement</h3><p>Dans les 45 min après l'effort, tes muscles absorbent les nutriments à un taux optimal. Sauter ce shake c'est gâcher la séance. Prépare les ingrédients avant de partir à la salle.</p></div></div>
+  <div class="tip-item"><div class="tip-num">08</div><div class="tip-text"><h3>S'attendre à des résultats rapides</h3><p>0.5 à 1 kg de muscle propre par mois naturellement. C'est normal. Sur 12 mois de constance avec ton programme, tu seras méconnaissable. La patience est l'ingrédient secret.</p></div></div>
+
+  <div class="callout callout-green" style="margin-top:24px">
+    <strong>✅ Le résumé de tout :</strong> Shake matin tous les jours · Créatine 7j/7 · Entraîne-toi 5 jours · Dors 8-9h · Sois constant 12 semaines. C'est tout.
+  </div>
+</div>
+
+<script>
+function goTo(id,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.nbtn').forEach(b=>b.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  btn.classList.add('on');
+  window.scrollTo({top:document.querySelector('.nav').offsetTop,behavior:'smooth'});
+}
+function showDay(id,el){
+  document.querySelectorAll('.day-panel').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.dtab').forEach(t=>t.classList.remove('on'));
+  document.getElementById('day-'+id).classList.add('on');
+  el.classList.add('on');
+}
+
+// ── EXERCICES 3D ANIMÉS ──
+const EXOS=[
+  {name:'Squat Barre',sets:'5×5 · Repos 3 min',tip:'Barre sur les trapèzes, descendre sous le parallèle. Exercice roi.',muscles:['Quadriceps','Fessiers','Ischios','Core'],prio:true,color:'#e8620a',
+    frames:[[
+      {type:'body',cx:140,cy:80,r:18},
+      {type:'line',x1:140,y1:98,x2:140,y2:155},{type:'line',x1:140,y1:110,x2:110,y2:130},{type:'line',x1:140,y1:110,x2:170,y2:130},
+      {type:'line',x1:140,y1:155,x2:120,y2:185},{type:'line',x1:140,y1:155,x2:160,y2:185},
+      {type:'line',x1:120,y1:185,x2:118,y2:210},{type:'line',x1:160,y1:185,x2:162,y2:210},
+      {type:'rect',x:95,y:107,w:90,h:8,fill:'#888',label:'barre'}
+    ],[
+      {type:'body',cx:140,cy:110,r:18},
+      {type:'line',x1:140,y1:128,x2:140,y2:160},{type:'line',x1:140,y1:138,x2:108,y2:148},{type:'line',x1:140,y1:138,x2:172,y2:148},
+      {type:'line',x1:140,y1:160,x2:112,y2:178},{type:'line',x1:140,y1:160,x2:168,y2:178},
+      {type:'line',x1:112,y1:178,x2:108,y2:208},{type:'line',x1:168,y1:178,x2:172,y2:208},
+      {type:'rect',x:95,y:136,w:90,h:8,fill:'#888'}
+    ]]
+  },
+  {name:'Soulevé de Terre',sets:'4×4-6 · Repos 3 min',tip:'Dos plat, barre proche du corps. Maîtrise le geste avant de charger.',muscles:['Dos entier','Ischios','Fessiers','Trapèzes'],prio:true,color:'#e8620a',
+    frames:[[
+      {type:'body',cx:140,cy:80,r:18},
+      {type:'line',x1:140,y1:98,x2:140,y2:155},{type:'line',x1:140,y1:110,x2:110,y2:130},{type:'line',x1:140,y1:110,x2:170,y2:130},
+      {type:'line',x1:140,y1:155,x2:125,y2:185},{type:'line',x1:140,y1:155,x2:155,y2:185},
+      {type:'line',x1:125,y1:185,x2:123,y2:210},{type:'line',x1:155,y1:185,x2:157,y2:210},
+      {type:'line',x1:110,y1:130,x2:115,y2:195},{type:'line',x1:170,y1:130,x2:165,y2:195},
+      {type:'rect',x:100,y:195,w:80,h:12,fill:'#555',label:'barre au sol'}
+    ],[
+      {type:'body',cx:140,cy:72,r:18},
+      {type:'line',x1:140,y1:90,x2:140,y2:148},{type:'line',x1:140,y1:105,x2:110,y2:122},{type:'line',x1:140,y1:105,x2:170,y2:122},
+      {type:'line',x1:140,y1:148,x2:128,y2:175},{type:'line',x1:140,y1:148,x2:152,y2:175},
+      {type:'line',x1:128,y1:175,x2:126,y2:207},{type:'line',x1:152,y1:175,x2:154,y2:207},
+      {type:'line',x1:110,y1:122,x2:117,y2:195},{type:'line',x1:170,y1:122,x2:163,y2:195},
+      {type:'rect',x:100,y:195,w:80,h:12,fill:'#555'}
+    ]]
+  },
+  {name:'Développé Couché',sets:'4×6-8 · Repos 2\'30',tip:'Barre effleure la poitrine. Poussée explosive vers le haut.',muscles:['Pectoraux','Triceps','Épaules ant.'],prio:true,color:'#e8620a',
+    frames:[[
+      {type:'rect',x:80,y:155,w:120,h:16,fill:'#bbb',label:'banc'},
+      {type:'body',cx:140,cy:135,r:18},
+      {type:'line',x1:140,y1:153,x2:140,y2:158},
+      {type:'line',x1:140,y1:145,x2:105,y2:150},{type:'line',x1:140,y1:145,x2:175,y2:150},
+      {type:'line',x1:105,y1:150,x2:100,y2:160},{type:'line',x1:175,y1:150,x2:180,y2:160},
+      {type:'line',x1:140,y1:158,x2:125,y2:175},{type:'line',x1:140,y1:158,x2:155,y2:175},
+      {type:'line',x1:125,y1:175,x2:123,y2:200},{type:'line',x1:155,y1:175,x2:157,y2:200},
+      {type:'rect',x:88,y:148,w:104,h:7,fill:'#888',label:'barre haute'}
+    ],[
+      {type:'rect',x:80,y:155,w:120,h:16,fill:'#bbb'},
+      {type:'body',cx:140,cy:135,r:18},
+      {type:'line',x1:140,y1:153,x2:140,y2:158},
+      {type:'line',x1:140,y1:145,x2:102,y2:155},{type:'line',x1:140,y1:145,x2:178,y2:155},
+      {type:'line',x1:102,y1:155,x2:98,y2:170},{type:'line',x1:178,y1:155,x2:182,y2:170},
+      {type:'line',x1:140,y1:158,x2:125,y2:175},{type:'line',x1:140,y1:158,x2:155,y2:175},
+      {type:'line',x1:125,y1:175,x2:123,y2:200},{type:'line',x1:155,y1:175,x2:157,y2:200},
+      {type:'rect',x:88,y:158,w:104,h:7,fill:'#888',label:'barre basse'}
+    ]]
+  },
+  {name:'Tractions',sets:'4×6-8 · Repos 2\'30',tip:'Prise large pronation. Partir en suspension complète, tirer le menton au-dessus.',muscles:['Grand dorsal','Biceps','Rhomboïdes'],prio:true,color:'#e8620a',
+    frames:[[
+      {type:'rect',x:80,y:30,w:120,h:10,fill:'#555',label:'barre'},
+      {type:'body',cx:140,cy:80,r:18},
+      {type:'line',x1:140,y1:62,x2:140,y2:40},{type:'line',x1:140,y1:70,x2:105,y2:42},{type:'line',x1:140,y1:70,x2:175,y2:42},
+      {type:'line',x1:140,y1:98,x2:140,y2:150},
+      {type:'line',x1:140,y1:115,x2:125,y2:145},{type:'line',x1:140,y1:115,x2:155,y2:145},
+      {type:'line',x1:125,y1:145,x2:122,y2:175},{type:'line',x1:155,y1:145,x2:158,y2:175}
+    ],[
+      {type:'rect',x:80,y:30,w:120,h:10,fill:'#555'},
+      {type:'body',cx:140,cy:60,r:18},
+      {type:'line',x1:140,y1:42,x2:140,y2:40},{type:'line',x1:140,y1:50,x2:110,y2:40},{type:'line',x1:140,y1:50,x2:170,y2:40},
+      {type:'line',x1:140,y1:78,x2:140,y2:130},
+      {type:'line',x1:140,y1:95,x2:125,y2:125},{type:'line',x1:140,y1:95,x2:155,y2:125},
+      {type:'line',x1:125,y1:125,x2:122,y2:155},{type:'line',x1:155,y1:125,x2:158,y2:155}
+    ]]
+  },
+  {name:'Développé Militaire',sets:'4×6-8 · Repos 2\'30',tip:'Debout, gainage constant. Pousser verticalement au-dessus de la tête.',muscles:['Épaules','Triceps','Trapèzes'],prio:true,color:'#0891b2',
+    frames:[[
+      {type:'body',cx:140,cy:75,r:18},
+      {type:'line',x1:140,y1:93,x2:140,y2:155},{type:'line',x1:140,y1:108,x2:105,y2:115},{type:'line',x1:140,y1:108,x2:175,y2:115},
+      {type:'line',x1:105,y1:115,x2:100,y2:100},{type:'line',x1:175,y1:115,x2:180,y2:100},
+      {type:'line',x1:140,y1:155,x2:125,y2:185},{type:'line',x1:140,y1:155,x2:155,y2:185},
+      {type:'line',x1:125,y1:185,x2:123,y2:212},{type:'line',x1:155,y1:185,x2:157,y2:212},
+      {type:'rect',x:88,y:108,w:104,h:7,fill:'#888',label:'barre épaules'}
+    ],[
+      {type:'body',cx:140,cy:75,r:18},
+      {type:'line',x1:140,y1:93,x2:140,y2:155},{type:'line',x1:140,y1:108,x2:108,y2:118},{type:'line',x1:140,y1:108,x2:172,y2:118},
+      {type:'line',x1:108,y1:118,x2:100,y2:55},{type:'line',x1:172,y1:118,x2:180,y2:55},
+      {type:'line',x1:140,y1:155,x2:125,y2:185},{type:'line',x1:140,y1:155,x2:155,y2:185},
+      {type:'line',x1:125,y1:185,x2:123,y2:212},{type:'line',x1:155,y1:185,x2:157,y2:212},
+      {type:'rect',x:88,y:48,w:104,h:7,fill:'#888',label:'barre en haut'}
+    ]]
+  },
+  {name:'Rowing Barre',sets:'3×8-10 · Repos 2 min',tip:'Buste à 45°, barre vers le nombril. Squeeze des omoplates en haut.',muscles:['Dorsaux','Trapèzes','Biceps'],prio:true,color:'#0891b2',
+    frames:[[
+      {type:'body',cx:110,cy:90,r:18},
+      {type:'line',x1:110,y1:108,x2:140,y2:150},
+      {type:'line',x1:115,y1:100,x2:150,y2:112},{type:'line',x1:115,y1:100,x2:148,y2:88},
+      {type:'line',x1:148,y1:88,x2:158,y2:100},{type:'line',x1:150,y1:112,x2:162,y2:124},
+      {type:'line',x1:140,y1:150,x2:128,y2:178},{type:'line',x1:140,y1:150,x2:155,y2:175},
+      {type:'line',x1:128,y1:178,x2:126,y2:208},{type:'line',x1:155,y1:175,x2:157,y2:208},
+      {type:'rect',x:155,y:178,w:55,h:7,fill:'#888',label:'barre bas'}
+    ],[
+      {type:'body',cx:110,cy:90,r:18},
+      {type:'line',x1:110,y1:108,x2:140,y2:150},
+      {type:'line',x1:115,y1:100,x2:148,y2:105},{type:'line',x1:115,y1:100,x2:144,y2:86},
+      {type:'line',x1:144,y1:86,x2:148,y2:105},{type:'line',x1:148,y1:105,x2:155,y2:115},
+      {type:'line',x1:140,y1:150,x2:128,y2:178},{type:'line',x1:140,y1:150,x2:155,y2:175},
+      {type:'line',x1:128,y1:178,x2:126,y2:208},{type:'line',x1:155,y1:175,x2:157,y2:208},
+      {type:'rect',x:148,y:110,w:55,h:7,fill:'#888',label:'barre haut'}
+    ]]
+  },
+  {name:'Curl Barre EZ',sets:'3×8-10 · Repos 1\'30',tip:'Coudes fixes contre le corps. Montée complète, descente lente 2-3 sec.',muscles:['Biceps','Brachial'],prio:false,color:'#16a34a',
+    frames:[[
+      {type:'body',cx:140,cy:75,r:18},
+      {type:'line',x1:140,y1:93,x2:140,y2:155},{type:'line',x1:140,y1:108,x2:108,y2:118},{type:'line',x1:140,y1:108,x2:172,y2:118},
+      {type:'line',x1:108,y1:118,x2:110,y2:170},{type:'line',x1:172,y1:118,x2:170,y2:170},
+      {type:'line',x1:140,y1:155,x2:125,y2:183},{type:'line',x1:140,y1:155,x2:155,y2:183},
+      {type:'line',x1:125,y1:183,x2:123,y2:210},{type:'line',x1:155,y1:183,x2:157,y2:210},
+      {type:'rect',x:98,y:168,w:84,h:7,fill:'#888',label:'barre bas'}
+    ],[
+      {type:'body',cx:140,cy:75,r:18},
+      {type:'line',x1:140,y1:93,x2:140,y2:155},{type:'line',x1:140,y1:108,x2:108,y2:118},{type:'line',x1:140,y1:108,x2:172,y2:118},
+      {type:'line',x1:108,y1:118,x2:100,y2:105},{type:'line',x1:172,y1:118,x2:180,y2:105},
+      {type:'line',x1:140,y1:155,x2:125,y2:183},{type:'line',x1:140,y1:155,x2:155,y2:183},
+      {type:'line',x1:125,y1:183,x2:123,y2:210},{type:'line',x1:155,y1:183,x2:157,y2:210},
+      {type:'rect',x:88,y:100,w:84,h:7,fill:'#888',label:'barre haut'}
+    ]]
+  },
+  {name:'Dips',sets:'3×8-10 · Repos 2 min',tip:'Légèrement penché en avant. Descendre à 90°. Lester quand facile.',muscles:['Pectoraux','Triceps'],prio:false,color:'#16a34a',
+    frames:[[
+      {type:'line',x1:100,y1:90,x2:100,y2:220,stroke:'#999',sw:4},{type:'line',x1:180,y1:90,x2:180,y2:220,stroke:'#999',sw:4},
+      {type:'line',x1:90,y1:90,x2:110,y2:90,stroke:'#999',sw:6},{type:'line',x1:170,y1:90,x2:190,y2:90,stroke:'#999',sw:6},
+      {type:'body',cx:140,cy:80,r:18},
+      {type:'line',x1:140,y1:98,x2:140,y2:145},
+      {type:'line',x1:140,y1:112,x2:105,y2:120},{type:'line',x1:140,y1:112,x2:175,y2:120},
+      {type:'line',x1:105,y1:120,x2:102,y2:90},{type:'line',x1:175,y1:120,x2:178,y2:90},
+      {type:'line',x1:140,y1:145,x2:130,y2:175},{type:'line',x1:140,y1:145,x2:150,y2:175},
+      {type:'line',x1:130,y1:175,x2:128,y2:205},{type:'line',x1:150,y1:175,x2:152,y2:205}
+    ],[
+      {type:'line',x1:100,y1:90,x2:100,y2:220,stroke:'#999',sw:4},{type:'line',x1:180,y1:90,x2:180,y2:220,stroke:'#999',sw:4},
+      {type:'line',x1:90,y1:90,x2:110,y2:90,stroke:'#999',sw:6},{type:'line',x1:170,y1:90,x2:190,y2:90,stroke:'#999',sw:6},
+      {type:'body',cx:140,cy:105,r:18},
+      {type:'line',x1:140,y1:123,x2:140,y2:165},
+      {type:'line',x1:140,y1:135,x2:106,y2:130},{type:'line',x1:140,y1:135,x2:174,y2:130},
+      {type:'line',x1:106,y1:130,x2:102,y2:90},{type:'line',x1:174,y1:130,x2:178,y2:90},
+      {type:'line',x1:140,y1:165,x2:130,y2:195},{type:'line',x1:140,y1:165,x2:150,y2:195},
+      {type:'line',x1:130,y1:195,x2:128,y2:215},{type:'line',x1:150,y1:195,x2:152,y2:215}
+    ]]
+  },
+  {name:'Hip Thrust',sets:'3×12 · Repos 1\'30',tip:'Haut du dos sur banc, barre sur les hanches. Serrer les fessiers en haut.',muscles:['Fessiers','Ischios'],prio:false,color:'#16a34a',
+    frames:[[
+      {type:'rect',x:60,y:150,w:50,h:18,fill:'#bbb',label:'banc'},
+      {type:'body',cx:100,cy:130,r:18},
+      {type:'line',x1:100,y1:148,x2:108,y2:155},
+      {type:'line',x1:100,y1:138,x2:75,y2:148},{type:'line',x1:100,y1:138,x2:125,y2:145},
+      {type:'line',x1:75,y1:148,x2:72,y2:162},{type:'line',x1:125,y1:145,x2:160,y2:155},
+      {type:'line',x1:160,y1:155,x2:162,y2:185},{type:'line',x1:72,y1:162,x2:70,y2:185}
+    ],[
+      {type:'rect',x:60,y:150,w:50,h:18,fill:'#bbb'},
+      {type:'body',cx:100,cy:120,r:18},
+      {type:'line',x1:100,y1:138,x2:108,y2:148},
+      {type:'line',x1:100,y1:128,x2:75,y2:138},{type:'line',x1:100,y1:128,x2:125,y2:130},
+      {type:'line',x1:75,y1:138,x2:72,y2:155},{type:'line',x1:125,y1:130,x2:155,y2:145},
+      {type:'line',x1:155,y1:145,x2:157,y2:185},{type:'line',x1:72,y1:155,x2:70,y2:185},
+      {type:'rect',x:108,y:140,w:55,h:8,fill:'#888',label:'barre'}
+    ]]
+  },
+  {name:'Élévations Mollets',sets:'4×15-20 · Repos 1 min',tip:'Pleine amplitude obligatoire. Talon au max en bas, pointe au max en haut.',muscles:['Gastrocnémien','Soléaire'],prio:false,color:'#16a34a',
+    frames:[[
+      {type:'body',cx:140,cy:72,r:18},
+      {type:'line',x1:140,y1:90,x2:140,y2:150},{type:'line',x1:140,y1:105,x2:115,y2:118},{type:'line',x1:140,y1:105,x2:165,y2:118},
+      {type:'line',x1:115,y1:118,x2:112,y2:130},{type:'line',x1:165,y1:118,x2:168,y2:130},
+      {type:'line',x1:140,y1:150,x2:128,y2:178},{type:'line',x1:140,y1:150,x2:152,y2:178},
+      {type:'line',x1:128,y1:178,x2:126,y2:210},{type:'line',x1:152,y1:178,x2:154,y2:210}
+    ],[
+      {type:'body',cx:140,cy:65,r:18},
+      {type:'line',x1:140,y1:83,x2:140,y2:143},{type:'line',x1:140,y1:98,x2:115,y2:111},{type:'line',x1:140,y1:98,x2:165,y2:111},
+      {type:'line',x1:115,y1:111,x2:112,y2:123},{type:'line',x1:165,y1:111,x2:168,y2:123},
+      {type:'line',x1:140,y1:143,x2:128,y2:170},{type:'line',x1:140,y1:143,x2:152,y2:170},
+      {type:'line',x1:128,y1:170,x2:122,y2:205},{type:'line',x1:152,y1:170,x2:158,y2:205}
+    ]]
+  },
+  {name:'Élévations Latérales',sets:'3×12-15 · Repos 1\'30',tip:'Poids léger ! Monter jusqu\'à l\'horizontal. Descente lente.',muscles:['Deltoïde latéral'],prio:false,color:'#d97706',
+    frames:[[
+      {type:'body',cx:140,cy:75,r:18},
+      {type:'line',x1:140,y1:93,x2:140,y2:155},{type:'line',x1:140,y1:108,x2:108,y2:118},{type:'line',x1:140,y1:108,x2:172,y2:118},
+      {type:'line',x1:108,y1:118,x2:104,y2:145},{type:'line',x1:172,y1:118,x2:176,y2:145},
+      {type:'circle',cx:101,cy:148,r:5,fill:'#888'},{type:'circle',cx:179,cy:148,r:5,fill:'#888'},
+      {type:'line',x1:140,y1:155,x2:127,y2:183},{type:'line',x1:140,y1:155,x2:153,y2:183},
+      {type:'line',x1:127,y1:183,x2:125,y2:210},{type:'line',x1:153,y1:183,x2:155,y2:210}
+    ],[
+      {type:'body',cx:140,cy:75,r:18},
+      {type:'line',x1:140,y1:93,x2:140,y2:155},{type:'line',x1:140,y1:108,x2:108,y2:118},{type:'line',x1:140,y1:108,x2:172,y2:118},
+      {type:'line',x1:108,y1:118,x2:90,y2:110},{type:'line',x1:172,y1:118,x2:190,y2:110},
+      {type:'circle',cx:87,cy:110,r:5,fill:'#888'},{type:'circle',cx:193,cy:110,r:5,fill:'#888'},
+      {type:'line',x1:140,y1:155,x2:127,y2:183},{type:'line',x1:140,y1:155,x2:153,y2:183},
+      {type:'line',x1:127,y1:183,x2:125,y2:210},{type:'line',x1:153,y1:183,x2:155,y2:210}
+    ]]
+  },
+  {name:'Leg Extension',sets:'3×12-15 · Repos 1\'30',tip:'Extension complète, contraction 1 sec en haut, descente lente.',muscles:['Quadriceps'],prio:false,color:'#d97706',
+    frames:[[
+      {type:'rect',x:80,y:140,w:110,h:20,fill:'#bbb',label:'machine'},
+      {type:'body',cx:130,cy:105,r:18},
+      {type:'line',x1:130,y1:123,x2:130,y2:143},
+      {type:'line',x1:130,y1:133,x2:105,y2:143},{type:'line',x1:130,y1:133,x2:155,y2:143},
+      {type:'line',x1:105,y1:143,x2:100,y2:160},{type:'line',x1:155,y1:143,x2:160,y2:160},
+      {type:'line',x1:100,y1:160,x2:98,y2:195},{type:'line',x1:160,y1:160,x2:162,y2:195}
+    ],[
+      {type:'rect',x:80,y:140,w:110,h:20,fill:'#bbb'},
+      {type:'body',cx:130,cy:105,r:18},
+      {type:'line',x1:130,y1:123,x2:130,y2:143},
+      {type:'line',x1:130,y1:133,x2:105,y2:143},{type:'line',x1:130,y1:133,x2:155,y2:143},
+      {type:'line',x1:105,y1:143,x2:98,y2:168},{type:'line',x1:155,y1:143,x2:162,y2:168},
+      {type:'line',x1:98,y1:168,x2:90,y2:195},{type:'line',x1:162,y1:168,x2:170,y2:195}
+    ]]
+  }
+];
+
+const states={};
+
+function drawFrame(canvas,exo,f){
+  const ctx=canvas.getContext('2d');
+  const W=canvas.width,H=canvas.height;
+  ctx.clearRect(0,0,W,H);
+  const frame=exo.frames[f];
+  frame.forEach(el=>{
+    ctx.save();
+    if(el.type==='body'){
+      ctx.beginPath();ctx.arc(el.cx,el.cy,el.r,0,Math.PI*2);
+      ctx.fillStyle=exo.color;ctx.fill();
+      ctx.strokeStyle='rgba(0,0,0,0.15)';ctx.lineWidth=1.5;ctx.stroke();
+    } else if(el.type==='line'){
+      ctx.beginPath();ctx.moveTo(el.x1,el.y1);ctx.lineTo(el.x2,el.y2);
+      ctx.strokeStyle=el.stroke||'#333';ctx.lineWidth=el.sw||5;ctx.lineCap='round';ctx.stroke();
+    } else if(el.type==='rect'){
+      ctx.fillStyle=el.fill||'#888';
+      ctx.beginPath();ctx.roundRect(el.x,el.y,el.w,el.h,3);ctx.fill();
+      if(el.label){ctx.fillStyle='#666';ctx.font='10px Inter,sans-serif';ctx.fillText(el.label,el.x,el.y-3);}
+    } else if(el.type==='circle'){
+      ctx.beginPath();ctx.arc(el.cx,el.cy,el.r,0,Math.PI*2);
+      ctx.fillStyle=el.fill||'#888';ctx.fill();
+    }
+    ctx.restore();
+  });
+}
+
+function toggleAnim(id){
+  const s=states[id];
+  if(!s)return;
+  if(s.running){
+    clearInterval(s.timer);s.running=false;
+    document.querySelector(`[data-id="${id}"] .play-btn`).textContent='▶ Play';
+  } else {
+    s.running=true;
+    document.querySelector(`[data-id="${id}"] .play-btn`).textContent='⏸ Pause';
+    s.timer=setInterval(()=>{
+      s.f=(s.f+1)%s.frames;
+      s.prog=(s.prog||0)+1;
+      const t=s.prog/20;
+      const canvas=document.querySelector(`[data-id="${id}"] canvas`);
+      drawFrameInterp(canvas,EXOS[id],s.prog);
+    },80);
+  }
+}
+
+function drawFrameInterp(canvas,exo,tick){
+  const totalFrames=20;
+  const t=(tick%totalFrames)/totalFrames;
+  const f0=exo.frames[0];const f1=exo.frames[1];
+  const ping=t<0.5?t*2:2-t*2;
+  const ctx=canvas.getContext('2d');
+  const W=canvas.width,H=canvas.height;
+  ctx.clearRect(0,0,W,H);
+  const interp=(a,b)=>a+(b-a)*ping;
+  const minLen=Math.min(f0.length,f1.length);
+  for(let i=0;i<minLen;i++){
+    const e0=f0[i],e1=f1[i];
+    if(!e0||!e1){continue;}
+    ctx.save();
+    if(e0.type==='body'){
+      const cx=interp(e0.cx,e1.cx),cy=interp(e0.cy,e1.cy);
+      ctx.beginPath();ctx.arc(cx,cy,e0.r,0,Math.PI*2);
+      ctx.fillStyle=exo.color;ctx.fill();
+      ctx.strokeStyle='rgba(0,0,0,0.12)';ctx.lineWidth=1.5;ctx.stroke();
+    } else if(e0.type==='line'){
+      ctx.beginPath();
+      ctx.moveTo(interp(e0.x1,e1.x1),interp(e0.y1,e1.y1));
+      ctx.lineTo(interp(e0.x2,e1.x2),interp(e0.y2,e1.y2));
+      ctx.strokeStyle=e0.stroke||'#2d2520';ctx.lineWidth=e0.sw||5;ctx.lineCap='round';ctx.stroke();
+    } else if(e0.type==='rect'){
+      ctx.fillStyle=e0.fill||'#888';
+      ctx.beginPath();ctx.roundRect(interp(e0.x,e1.x),interp(e0.y,e1.y),e0.w,e0.h,3);ctx.fill();
+      if(e0.label){ctx.fillStyle='#999';ctx.font='10px Inter,sans-serif';ctx.fillText(e0.label,e0.x,e0.y-3);}
+    } else if(e0.type==='circle'){
+      ctx.beginPath();ctx.arc(interp(e0.cx,e1.cx),interp(e0.cy,e1.cy),e0.r,0,Math.PI*2);
+      ctx.fillStyle=e0.fill||'#888';ctx.fill();
+    }
+    ctx.restore();
+  }
+}
+
+function buildExoGrid(){
+  const grid=document.getElementById('exo-grid');
+  if(!grid)return;
+  grid.innerHTML='';
+  EXOS.forEach((exo,i)=>{
+    states[i]={f:0,running:false,timer:null,prog:0,frames:20};
+    const card=document.createElement('div');
+    card.className='exo-card';
+    card.setAttribute('data-id',i);
+    card.innerHTML=`
+      <div class="anim-box">
+        <canvas width="280" height="200"></canvas>
+        ${exo.prio?'<div class="prio-badge">Fondamental</div>':''}
+        <button class="play-btn" onclick="toggleAnim(${i})">▶ Play</button>
+      </div>
+      <div class="exo-body">
+        <div class="exo-name">${exo.name}</div>
+        <div class="exo-sets">${exo.sets}</div>
+        <div class="exo-tip">${exo.tip}</div>
+        <div class="muscles">${exo.muscles.map(m=>`<span class="mtag">${m}</span>`).join('')}</div>
+      </div>`;
+    grid.appendChild(card);
+    const canvas=card.querySelector('canvas');
+    drawFrame(canvas,exo,0);
+  });
+}
+
+buildExoGrid();
+</script>
+</body>
+</html>
